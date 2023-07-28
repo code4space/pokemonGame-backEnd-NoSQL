@@ -1,6 +1,6 @@
-export const userRoute = require('express').Router()
 import User from '../controllers/user'
 import auth from '../middleware/authentication'
+export const userRoute = require('express').Router()
 
 userRoute.post("/login", User.login)
 userRoute.post("/register", User.register)
