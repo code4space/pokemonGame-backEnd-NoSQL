@@ -1,0 +1,110 @@
+[
+    {
+        "name": "normal",
+        "weakness": ["fighting"],
+        "strength": [],
+        "immune": ["ghost"]
+    },
+    {
+        "name": "grass",
+        "weakness": ["flying", "poison", "bug", "fire", "ice"],
+        "strength": ["ground", "water", "grass", "electric"],
+        "immune": []
+    },
+    {
+        "name": "poison",
+        "weakness": ["ground", "psychic"],
+        "strength": ["fighting", "poison", "bug", "grass", "fairy"],
+        "immune": []
+    },
+    {
+        "name": "fire",
+        "weakness": ["ground", "rock", "water"],
+        "strength": ["bug", "steel", "fire", "grass", "ice", "fairy"],
+        "immune": []
+    },
+    {
+        "name": "flying",
+        "weakness": ["rock", "electric", "ice"],
+        "strength": ["fighting", "bug", "grass"],
+        "immune": ["ground"]
+    },
+    {
+        "name": "water",
+        "weakness": ["grass", "electric"],
+        "strength": ["steel", "fire", "water", "ice"],
+        "immune": []
+    },
+    {
+        "name": "electric",
+        "weakness": ["ground"],
+        "strength": ["flying", "steel", "electric"],
+        "immune": []
+    },
+    {
+        "name": "ice",
+        "weakness": ["fighting", "rock", "steel", "fire"],
+        "strength": ["ice"],
+        "immune": []
+    },
+    {
+        "name": "fighting",
+        "weakness": ["flying", "psychic", "fairy"],
+        "strength": ["rock", "bug", "dark"],
+        "immune": []
+    },
+    {
+        "name": "ground",
+        "weakness": ["water", "grass", "ice"],
+        "strength": ["poison", "rock"],
+        "immune": ["electric"]
+    },
+    {
+        "name": "psychic",
+        "weakness": ["bug", "ghost", "dark"],
+        "strength": ["fighting", "psychic"],
+        "immune": []
+    },
+    {
+        "name": "bug",
+        "weakness": ["flying", "rock", "fire"],
+        "strength": ["fighting", "ground", "grass"],
+        "immune": []
+    },
+    {
+        "name": "rock",
+        "weakness": ["fighting", "ground", "steel", "water", "grass"],
+        "strength": ["normal", "flying", "poison", "fire"],
+        "immune": []
+    },
+    {
+        "name": "ghost",
+        "weakness": ["ghost", "dark"],
+        "strength": ["poison", "bug"],
+        "immune": ["normal", "fighting"]
+    },
+    {
+        "name": "dragon",
+        "weakness": ["ice", "dragon", "fairy"],
+        "strength": ["fire", "water", "grass", "electric"],
+        "immune": []
+    },
+    {
+        "name": "dark",
+        "weakness": ["fighting", "bug", "fairy"],
+        "strength": ["ghost", "dark"],
+        "immune": ["psychic"]
+    },
+    {
+        "name": "steel",
+        "weakness": ["fighting", "ground", "fire"],
+        "strength": ["normal", "flying", "rock", "bug", "steel", "grass", "psychic", "ice", "dragon", "fairy"],
+        "immune": ["poison"]
+    },
+    {
+        "name": "fairy",
+        "weakness": ["poison", "steel"],
+        "strength": ["fighting", "bug", "dark"],
+        "immune": ["dragon"]
+    }
+]

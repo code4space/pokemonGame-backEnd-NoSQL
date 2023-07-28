@@ -1,0 +1,252 @@
+[
+    {
+        "name": "pikachu",
+        "hp": 35,
+        "attack": 55,
+        "def": 40,
+        "baseExp": 112,
+        "power": 290,
+        "img1": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/25.svg",
+        "img2": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
+        "summary": "When several of these POKéMON gather, their electricity could build and cause lightning storms.",
+        "frontView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png",
+        "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/25.png",
+        "type": [
+            "electric"
+        ]
+    },
+    {
+        "name": "sawsbuck",
+        "hp": 80,
+        "attack": 100,
+        "def": 70,
+        "baseExp": 166,
+        "power": 509,
+        "img1": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/586.svg",
+        "img2": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/586.png",
+        "summary": "They migrate according to the seasons. People can tell the season by looking at Sawsbuck’s horns.",
+        "frontView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/586.png",
+        "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/586.png",
+        "type": [
+            "normal",
+            "grass"
+        ]
+    },
+    {
+        "name": "celebi",
+        "hp": 100,
+        "attack": 100,
+        "def": 100,
+        "baseExp": 300,
+        "power": 930,
+        "img1": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/251.svg",
+        "img2": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/251.png",
+        "summary": "This POKéMON wan­ ders across time. Grass and trees flourish in the forests in which it has appeared.",
+        "frontView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/251.png",
+        "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/251.png",
+        "type": [
+            "psychic",
+            "grass"
+        ]
+    },
+    {
+        "name": "togekiss",
+        "hp": 85,
+        "attack": 50,
+        "def": 95,
+        "baseExp": 273,
+        "power": 804,
+        "img1": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/468.svg",
+        "img2": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/468.png",
+        "summary": "It will never appear where there is strife. Its sightings have become rare recently.",
+        "frontView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/468.png",
+        "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/468.png",
+        "type": [
+            "fairy",
+            "flying"
+        ]
+    },
+    {
+        "name": "meloetta-pirouette",
+        "hp": 100,
+        "attack": 128,
+        "def": 90,
+        "baseExp": 270,
+        "power": 885,
+        "img1": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/648-pirouette.svg",
+        "img2": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10018.png",
+        "summary": "Its melodies are sung with a special vocalization method that can control the feelings of those who hear it.",
+        "frontView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10018.png",
+        "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/648-pirouette.png",
+        "type": [
+            "normal",
+            "fighting"
+        ]
+    },
+    {
+        "name": "combusken",
+        "hp": 60,
+        "attack": 85,
+        "def": 60,
+        "baseExp": 142,
+        "power": 427,
+        "img1": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/256.svg",
+        "img2": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/256.png",
+        "summary": "COMBUSKEN toughens up its legs and thighs by running through fields and mountains. This POKéMON’s legs possess both speed and power, enabling it to dole out ten kicks in one second.",
+        "frontView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/256.png",
+        "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/256.png",
+        "type": [
+            "fire",
+            "fighting"
+        ]
+    },
+    {
+        "name": "kyurem-black",
+        "hp": 125,
+        "attack": 170,
+        "def": 100,
+        "baseExp": 350,
+        "power": 1235,
+        "img1": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/646-black.svg",
+        "img2": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10022.png",
+        "summary": "It generates a powerful, freezing energy inside itself, but its body became frozen when the energy leaked out.",
+        "frontView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10022.png",
+        "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/646-black.png",
+        "type": [
+            "dragon",
+            "ice"
+        ]
+    },
+    {
+        "name": "snover",
+        "hp": 60,
+        "attack": 62,
+        "def": 50,
+        "baseExp": 67,
+        "power": 256,
+        "img1": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/459.svg",
+        "img2": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/459.png",
+        "summary": "It lives on snowy mountains. Having had little contact with humans, it is boldly inquisitive.",
+        "frontView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/459.png",
+        "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/459.png",
+        "type": [
+            "grass",
+            "ice"
+        ]
+    },
+    {
+        "name": "walrein",
+        "hp": 110,
+        "attack": 80,
+        "def": 90,
+        "baseExp": 265,
+        "power": 837,
+        "img1": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/365.svg",
+        "img2": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/365.png",
+        "summary": "It swims through icy seas while shattering ice floes with its large tusks. It is protected by its thick blubber.",
+        "frontView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/365.png",
+        "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/365.png",
+        "type": [
+            "ice",
+            "water"
+        ]
+    },
+    {
+        "name": "keldeo-ordinary",
+        "hp": 91,
+        "attack": 72,
+        "def": 90,
+        "baseExp": 290,
+        "power": 862,
+        "img1": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/647.svg",
+        "img2": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/647.png",
+        "summary": "By blasting water from its hooves, it can glide across water. It excels at using leg moves while battling.",
+        "frontView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/647.png",
+        "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/647.png",
+        "type": [
+            "water",
+            "fighting"
+        ]
+    },
+    {
+        "name": "weezing",
+        "hp": 65,
+        "attack": 90,
+        "def": 120,
+        "baseExp": 172,
+        "power": 544,
+        "img1": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/110.svg",
+        "img2": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/110.png",
+        "summary": "Where two kinds of poison gases meet, 2 KOFFINGs can fuse into a WEEZING over many years.",
+        "frontView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/110.png",
+        "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/110.png",
+        "type": [
+            "poison"
+        ]
+    },
+    {
+        "name": "registeel",
+        "hp": 80,
+        "attack": 75,
+        "def": 150,
+        "baseExp": 290,
+        "power": 914,
+        "img1": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/379.svg",
+        "img2": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/379.png",
+        "summary": "REGISTEEL has a body that is harder than any kind of metal. Its body is apparently hollow. No one has any idea what this POKéMON eats.",
+        "frontView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/379.png",
+        "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/379.png",
+        "type": [
+            "steel"
+        ]
+    },
+    {
+        "name": "poliwhirl",
+        "hp": 65,
+        "attack": 65,
+        "def": 65,
+        "baseExp": 135,
+        "power": 406,
+        "img1": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/61.svg",
+        "img2": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/61.png",
+        "summary": "Capable of living in or out of water. When out of water, it sweats to keep its body slimy.",
+        "frontView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/61.png",
+        "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/61.png",
+        "type": [
+            "water"
+        ]
+    },
+    {
+        "name": "glalie",
+        "hp": 80,
+        "attack": 80,
+        "def": 80,
+        "baseExp": 168,
+        "power": 503,
+        "img1": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/362.svg",
+        "img2": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/362.png",
+        "summary": "GLALIE has a body made of rock, which it hardens with an armor of ice. This POKéMON has the ability to freeze moisture in the atmosphere into any shape it desires.",
+        "frontView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/362.png",
+        "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/362.png",
+        "type": [
+            "ice"
+        ]
+    },
+    {
+        "name": "vileplume",
+        "hp": 75,
+        "attack": 80,
+        "def": 85,
+        "baseExp": 245,
+        "power": 704,
+        "img1": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/45.svg",
+        "img2": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/45.png",
+        "summary": "It has the world’s largest petals. With every step, the petals shake out heavy clouds of toxic pollen.",
+        "frontView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/45.png",
+        "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/45.png",
+        "type": [
+            "grass",
+            "poison"
+        ]
+    }
+]
