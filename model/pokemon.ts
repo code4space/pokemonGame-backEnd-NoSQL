@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const Schema = mongoose.Schema;
+
 const schema = new mongoose.Schema({
     name: {
         type: String,
@@ -47,7 +49,7 @@ const schema = new mongoose.Schema({
     },
     type: [
         {
-            type: String,
+            type: Schema.Types.ObjectId,
             required: true,
             ref: 'Types'
         }

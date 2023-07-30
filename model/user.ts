@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const ballsSchema = new mongoose.Schema({
     pokeball: { type: Number, required: true },
@@ -6,6 +7,8 @@ const ballsSchema = new mongoose.Schema({
     ultraball: { type: Number, required: true },
     masterball: { type: Number, required: true },
 });
+
+
 
 const schema = new mongoose.Schema({
     username: {
@@ -29,6 +32,10 @@ const schema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    pokemons: [{
+        pokemon: { type: Schema.Types.ObjectId, ref: 'Pokemons' },
+        level: { type: Number, default: 1 }
+    }]
 });
 
 export const Users = mongoose.model('Users', schema);

@@ -8,5 +8,5 @@ export const errorHandler = (err, req, res, next?): void => {
     else if (err.code === 'Conflict') code = 409
     else if (err.code === 'Internal Server Error') code = 500
 
-    res.status(code).json({ message: err.message });
+    res.status(code).json({ message: err.message || 'Internal Server Error' });
 };
