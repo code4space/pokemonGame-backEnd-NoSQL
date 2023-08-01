@@ -1,4 +1,7 @@
 import { dbName } from "../constant/constant";
+require('../model/type');
+require('../model/pokemon');
+require('../model/user');
 
 const Redis = require('ioredis');
 const mongoose = require('mongoose');
@@ -12,7 +15,7 @@ export async function connectToDatabase(): Promise<void> {
             console.log('connected to Redis');
         });
 
-        await mongoose.connect(mongoURI, { useUnifiedTopology: true });
+        await mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
         console.log('connected to MongoDB');
     } catch (error) {
         console.log(error);

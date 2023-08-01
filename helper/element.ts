@@ -5,15 +5,13 @@ export function elementWeakness(elements:Array<any>) {
     result = [],
     element:Array<any> = [];
 
-    console.log(elements)
-
   //combine weakness and strength if pokemon has more than 1 element
   for (let i = 0; i < elements.length; i++) {
     element.push(elements[i].name);
-    weakness = weakness.concat(elements[i].weakness.split(","));
-    strength = strength.concat(elements[i].strength.split(","));
+    weakness = weakness.concat(elements[i].weakness);
+    strength = strength.concat(elements[i].strength);
     immune = immune
-      .concat(elements[i].immune.split(","))
+      .concat(elements[i].immune)
       .filter((el) => el !== "");
   }
 

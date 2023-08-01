@@ -38,11 +38,11 @@ async function seed(data: object | Array<any>, model: any): Promise<void> {
 async function seedDatabase() {
     try {
         await getDataAndSeed('pokemon', Pokemons)
-        await getDataAndSeed('type', Types)
         const userData = getData('user').map(el => {
             el.password = hashPassword(el.password)
             return el
         })
+        await getDataAndSeed('type', Types)
         await seed(userData, Users)
 
         console.log('seeding complete')
