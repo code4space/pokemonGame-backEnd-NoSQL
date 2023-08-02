@@ -176,6 +176,7 @@ export default class User {
             res.status(200).json({ message: 'Reward claimed' })
             await session.commitTransaction();
         } catch (error) {
+            console.log(error)
             await session.abortTransaction();
             next(error)
         } finally {

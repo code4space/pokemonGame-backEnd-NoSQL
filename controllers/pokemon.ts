@@ -21,7 +21,7 @@ export default class Pokemon {
             const skipDocuments = (page - 1) * limit;
 
             const mongoose = require('mongoose')
-            const userPokemon = await Users.aggregate([
+            const pipeline: Array<any> = [
                 {
                     $match: { _id: new mongoose.Types.ObjectId(req.user.id) }
                 },
@@ -50,9 +50,7 @@ export default class Pokemon {
                 {
                     $unwind: "$pokemons.pokemonData"
                 },
-                {
-                    $sort: { "pokemons.pokemonData.power": -1 } // Sort 'pokemons.pokemonData' by 'power' in ascending order
-                },
+                sort === 'true' ? { $sort: { "pokemons.pokemonData.baseExp": -1 } } : { $sort: { "pokemons.pokemonData._id": -1 } },
                 {
                     $group: {
                         _id: "$_id",
@@ -64,15 +62,15 @@ export default class Pokemon {
                         pokemons: { $push: "$pokemons" }
                     }
                 }
-            ]);
+            ]
+            const userPokemon = await Users.aggregate(pipeline);
 
             const userPokemonCount = await Users.findById(req.user.id).select('pokemons')
-
             const pokemon = userPokemon[0].pokemons.map(async (el) => {
                 const { id, name, hp, attack, def, baseExp, power, img1, img2, summary, frontView, backView, type } = el.pokemonData;
                 const typesRaw = await Types.find({ name: { $in: type } }, { _id: 0, __v: 0 })
                 const types = elementWeakness(typesRaw)
-                const level = el.level - 1;
+                const level = el.level;
 
                 return {
                     id, name,
@@ -80,13 +78,13 @@ export default class Pokemon {
                     attack: attack + additionalStat(attack, level),
                     def: def + additionalStat(def, level),
                     baseExp,
-                    power: power + additionalStat(power, level),
+                    power: Math.floor(power + additionalStat(power, level)),
                     img1, img2, summary, frontView, backView, level, type: types,
                 };
             })
             Promise.all(pokemon)
                 .then(pokemon => {
-                    if (sort === 'true') pokemon = pokemon.sort((a, b) => b.power - a.power)
+
                     return res.status(200).json({ pokemon, totalPokemon: userPokemonCount.pokemons.length, page });
                 })
 
@@ -119,14 +117,15 @@ export default class Pokemon {
             let enemies: Array<any> = [], temp: Array<number> = []
             for (let i = 0; i < 3; i++) {
                 const random = (): number => Math.floor(Math.random() * pokemon.length)
+                const pickOneNumber = random()
                 const level = difficulty === 'true' ? Math.ceil(Math.random() * (highestLevelPokemon + 6)) + Math.floor(highestLevelPokemon / 2) : Math.ceil(Math.random() * (highestLevelPokemon + 3))
-                if (temp.some(el => el === random())) {
+                if (temp.some(el => el === pickOneNumber)) {
                     i--
                     continue
                 }
-                else enemies.push({ ...pokemon[random()], level })
+                else enemies.push({ ...pokemon[pickOneNumber], level })
                 enemies[i].hp += additionalStat(enemies[i].hp, level)
-                temp.push(random())
+                temp.push(pickOneNumber)
             }
 
 
@@ -272,14 +271,12 @@ export default class Pokemon {
                 res.status(201).json({ message: `Success add Pokemon with name ${name} to your collection` })
             }
         } catch (error) {
-            console.log(error)
             next(error)
         }
     }
 
     static async deleteOneFromCollection(req, res, next) {
         try {
-            console.log('masuk vbg')
             await Users.updateOne(
                 { _id: req.user.id },
                 { $pull: { pokemons: { pokemon: req.params.id } } }
@@ -410,7 +407,7 @@ export default class Pokemon {
                         { $inc: { 'pokemons.$.level': 5 } },
                         { session });
                     await skip()
-                    res.status(200).json({ message: `Your ${name} has been leveled up by 5.`, status: true},)
+                    res.status(200).json({ message: `Your ${name} has been leveled up by 5.`, status: true },)
                 } else {
                     const user = await Users.findById(req.user.id).session(session);
                     user.pokemons.push({ pokemon: pokemon._id });
@@ -419,12 +416,11 @@ export default class Pokemon {
                     res.status(201).json({ message: `Success add ${name} to your collection`, status: true });
                 }
 
-            } else res.status(200).json({ message: 'Failed to get pokemon', status: false  })
+            } else res.status(200).json({ message: 'Failed to get pokemon', status: false })
 
             await session.commitTransaction();
         } catch (error) {
             await session.abortTransaction()
-            console.log(error)
             next(error)
         } finally {
             session.endSession()
