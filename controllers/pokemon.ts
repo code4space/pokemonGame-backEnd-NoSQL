@@ -66,6 +66,7 @@ export default class Pokemon {
             const userPokemon = await Users.aggregate(pipeline);
 
             const userPokemonCount = await Users.findById(req.user.id).select('pokemons')
+            if (!userPokemon.length) return res.status(200).json({pokemon: [], totalPokemon: 0, page: 1})
             const pokemon = userPokemon[0].pokemons.map(async (el) => {
                 const { id, name, hp, attack, def, baseExp, power, img1, img2, summary, frontView, backView, type } = el.pokemonData;
                 const typesRaw = await Types.find({ name: { $in: type } }, { _id: 0, __v: 0 })
@@ -84,7 +85,6 @@ export default class Pokemon {
             })
             Promise.all(pokemon)
                 .then(pokemon => {
-
                     return res.status(200).json({ pokemon, totalPokemon: userPokemonCount.pokemons.length, page });
                 })
 
@@ -123,9 +123,9 @@ export default class Pokemon {
                     i--
                     continue
                 }
-                else enemies.push({ ...pokemon[pickOneNumber], level })
+                else enemies.push({ ...pokemon[pickOneNumber ], level })
                 enemies[i].hp += additionalStat(enemies[i].hp, level)
-                temp.push(pickOneNumber)
+                temp.push(pickOneNumber )
             }
 
 
