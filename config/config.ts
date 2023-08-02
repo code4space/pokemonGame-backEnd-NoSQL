@@ -5,7 +5,7 @@ require('../model/user');
 
 const mongoose = require('mongoose');
 
-const mongoURI: string = `mongodb://127.0.0.1:27017/${dbName}`;
+const mongoURI: string = process.env.MONGODB_URI + dbName;
 
 export async function connectToDatabase(): Promise<void> {
     try {

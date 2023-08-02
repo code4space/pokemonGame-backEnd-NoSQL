@@ -1,3 +1,4 @@
+require('dotenv').config()
 import { dbName } from "../constant/constant";
 import { hashPassword } from "../helper/bcrypt";
 import { Pokemons } from "../model/pokemon";
@@ -8,7 +9,8 @@ const fs = require('fs');
 const mongoose = require('mongoose');
 
 // Connect to your MongoDB database
-mongoose.connect(`mongodb://127.0.0.1:27017/${dbName}`, {
+const mongoURI: string = process.env.MONGODB_URI + dbName;
+mongoose.connect(mongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
