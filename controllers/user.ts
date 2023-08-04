@@ -60,9 +60,9 @@ export default class User {
 
     static async getUserInfo(req, res, next) {
         try {
-            const { gacha, balls, draw } = await Users.findById(req.user.id, { 'balls._id': 0 })
+            const { gacha, balls, draw, username } = await Users.findById(req.user.id, { 'balls._id': 0 })
 
-            res.status(201).json({ data: { gacha, balls, draw } })
+            res.status(201).json({ data: { gacha, balls, draw, username } })
         } catch (error) {
             next(error)
         }
