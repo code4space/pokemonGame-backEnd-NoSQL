@@ -36,6 +36,7 @@ export default function initializeSocketIO(httpServer: Server) {
 
     socket.on('joinRoom', (data) => {
       joinRoom(socket, data.room, data.number);
+      // io.emit()
     });
 
     socket.on('message', (data) => {
