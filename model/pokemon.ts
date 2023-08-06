@@ -53,6 +53,14 @@ const schema = new mongoose.Schema({
             required: true,
         }
     ],
+    pokedex: {
+        type: Number,
+        required: true,
+    },
+    evolves_pokedex: {
+        type: Number,
+        default: null
+    }
 });
 
 export const Pokemons = mongoose.model('Pokemons', schema);

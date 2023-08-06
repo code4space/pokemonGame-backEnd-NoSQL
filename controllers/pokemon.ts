@@ -33,6 +33,7 @@ export default class Pokemon {
                         draw: 1,
                         balls: 1,
                         gacha: 1,
+                        star: 1,
                         pokemons: { $slice: ['$pokemons', skipDocuments, limit] }
                     }
                 },
@@ -66,9 +67,9 @@ export default class Pokemon {
             const userPokemon = await Users.aggregate(pipeline);
 
             const userPokemonCount = await Users.findById(req.user.id).select('pokemons')
-            if (!userPokemon.length) return res.status(200).json({pokemon: [], totalPokemon: 0, page: 1})
+            if (!userPokemon.length) return res.status(200).json({ pokemon: [], totalPokemon: 0, page: 1 })
             const pokemon = userPokemon[0].pokemons.map(async (el) => {
-                const { id, name, hp, attack, def, baseExp, power, img1, img2, summary, frontView, backView, type } = el.pokemonData;
+                const { id, name, hp, attack, def, baseExp, power, img1, img2, summary, frontView, backView, type, pokedex, evolves_pokedex } = el.pokemonData;
                 const typesRaw = await Types.find({ name: { $in: type } }, { _id: 0, __v: 0 })
                 const types = elementWeakness(typesRaw)
                 const level = el.level;
@@ -80,7 +81,7 @@ export default class Pokemon {
                     def: def + additionalStat(def, level),
                     baseExp,
                     power: Math.floor(power + additionalStat(power, level)),
-                    img1, img2, summary, frontView, backView, level, type: types,
+                    img1, img2, summary, frontView, backView, level, type: types, pokedex, evolves_pokedex,
                 };
             })
             Promise.all(pokemon)
@@ -123,9 +124,9 @@ export default class Pokemon {
                     i--
                     continue
                 }
-                else enemies.push({ ...pokemon[pickOneNumber ], level })
+                else enemies.push({ ...pokemon[pickOneNumber], level })
                 enemies[i].hp += additionalStat(enemies[i].hp, level)
-                temp.push(pickOneNumber )
+                temp.push(pickOneNumber)
             }
 
 
@@ -199,12 +200,43 @@ export default class Pokemon {
 
             const type: Array<string> = detailPokemon.types.map(el => el.type.name);
 
-            const { stats, base_experience, sprites } = detailPokemon;
+            const { name, stats, base_experience, sprites, id: pokedex } = detailPokemon;
             const baseStatSum = stats.reduce((sum, stat) => sum + stat.base_stat, 0);
             const additionalPower = (base_experience) => base_experience * 0.1;
 
+            function findTheNextEvolution(data, name: string) {
+                if (data.species.name === name) {
+                    if (data.evolves_to.length) {
+                        return data.evolves_to[0].species.url.split('/')[6]
+                    } else {
+                        return null
+                    }
+                } else {
+                    if (data.evolves_to.length) {
+                        for (const evolution of data.evolves_to) {
+                            return findTheNextEvolution(evolution, name)
+                        }
+                    }
+                }
+            }
+
+            // Find the evolution
+            const evolves_pokedex = await axios({
+                method: "GET",
+                url: `https://pokeapi.co/api/v2/pokemon-species/${pokedex}`
+            }).then(async (value) => {
+                return await axios({
+                    method: 'GET',
+                    url: value.data.evolution_chain.url
+                }).then(value => {
+                    const isEvolving = value.data.chain
+                    return findTheNextEvolution(isEvolving, name)
+                })
+            })
+
+
             const pokemon = {
-                name: detailPokemon.name,
+                name: name,
                 attack: stats[1].base_stat,
                 hp: stats[0].base_stat,
                 def: stats[2].base_stat,
@@ -216,8 +248,9 @@ export default class Pokemon {
                 frontView: sprites.front_default,
                 backView: sprites.back_default,
                 type,
+                pokedex,
+                evolves_pokedex
             };
-
 
             res.status(200).json({ pokemon })
         } catch (error) {
@@ -227,7 +260,7 @@ export default class Pokemon {
 
     static async addOneToCollection(req, res, next) {
         try {
-            const { name, attack, hp, def, baseExp, power, img1, img2, summary, frontView, backView, type } = req.body;
+            const { name, attack, hp, def, baseExp, power, img1, img2, summary, frontView, backView, type, pokedex, evolves_pokedex } = req.body;
 
             if (!name) throw handleError('Bad Request', 'name is required!')
             else if (!attack) throw handleError('Bad Request', 'attack is required!');
@@ -241,9 +274,10 @@ export default class Pokemon {
             else if (!frontView) throw handleError('Bad Request', 'frontView is required!');
             else if (!backView) throw handleError('Bad Request', 'backView is required!');
             else if (!type) throw handleError('Bad Request', 'type is required!');
+            else if (!pokedex) throw handleError('Bad Request', 'pokedex is required!');
 
             let pokemon = await Pokemons.findOne({ name }, { '__v': 0 })
-            if (!pokemon) pokemon = await Pokemons.create({ name, attack, hp, def, baseExp, power, img1, img2, summary, frontView, backView, type })
+            if (!pokemon) pokemon = await Pokemons.create({ name, attack, hp, def, baseExp, power, img1, img2, summary, frontView, backView, type, pokedex, evolves_pokedex: evolves_pokedex ?? null })
 
             const userPokemon = await Users.findOne({
                 _id: req.user.id,
@@ -367,7 +401,7 @@ export default class Pokemon {
 
             //? get pokemon
             if (drawPokemon(ballType, baseExp)) {
-                const { name, attack, hp, def, baseExp, power, img1, img2, summary, frontView, backView, type } = req.body;
+                const { name, attack, hp, def, baseExp, power, img1, img2, summary, frontView, backView, type, pokedex, evolves_pokedex } = req.body;
 
                 if (!name) throw handleError('Bad Request', 'name is required!')
                 else if (!attack) throw handleError('Bad Request', 'attack is required!');
@@ -381,9 +415,10 @@ export default class Pokemon {
                 else if (!frontView) throw handleError('Bad Request', 'frontView is required!');
                 else if (!backView) throw handleError('Bad Request', 'backView is required!');
                 else if (!type) throw handleError('Bad Request', 'type is required!');
+                else if (!pokedex) throw handleError('Bad Request', 'pokedex is required!');
 
                 let pokemon = await Pokemons.findOne({ name }, { '__v': 0 })
-                if (!pokemon) pokemon = await Pokemons.create({ name, attack, hp, def, baseExp, power, img1, img2, summary, frontView, backView, type })
+                if (!pokemon) pokemon = await Pokemons.create({ name, attack, hp, def, baseExp, power, img1, img2, summary, frontView, backView, type, pokedex, evolves_pokedex: evolves_pokedex ?? null })
 
                 const userPokemon = await Users.findOne({
                     _id: req.user.id,
@@ -420,6 +455,7 @@ export default class Pokemon {
 
             await session.commitTransaction();
         } catch (error) {
+            console.log(error)
             await session.abortTransaction()
             next(error)
         } finally {

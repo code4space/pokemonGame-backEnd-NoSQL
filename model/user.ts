@@ -34,7 +34,8 @@ const schema = new mongoose.Schema({
     },
     pokemons: [{
         pokemon: { type: Schema.Types.ObjectId, ref: 'Pokemons' },
-        level: { type: Number, default: 1 }
+        level: { type: Number, default: 1 },
+        star: { type: Number, default: 1 },
     }]
 });
 
