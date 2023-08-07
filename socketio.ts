@@ -6,7 +6,7 @@ const rooms = new Map()
 export default function initializeSocketIO(httpServer: Server) {
   const io = new socketIo.Server(httpServer, {
     cors: {
-      origin: 'http://127.0.0.1:5173',
+      origin: 'http://localhost:5173',
       methods: ['GET', 'POST', 'PATCH', 'DELETE'],
       credentials: true,
     },

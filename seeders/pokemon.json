@@ -13,7 +13,8 @@
     "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/25.png",
     "type": ["electric"],
     "pokedex": 25,
-    "evolves_pokedex": 26
+    "evolves_pokedex": 26,
+    "evolves_name": "raichu"
   },
   {
     "name": "sawsbuck",
@@ -29,7 +30,8 @@
     "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/586.png",
     "type": ["normal", "grass"],
     "pokedex": 586,
-    "evolves_pokedex": null
+    "evolves_pokedex": null,
+    "evolves_name": null
   },
   {
     "name": "celebi",
@@ -45,7 +47,8 @@
     "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/251.png",
     "type": ["psychic", "grass"],
     "pokedex": 251,
-    "evolves_pokedex": null
+    "evolves_pokedex": null,
+    "evolves_name": null
   },
   {
     "name": "togekiss",
@@ -61,7 +64,8 @@
     "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/468.png",
     "type": ["fairy", "flying"],
     "pokedex": 468,
-    "evolves_pokedex": null
+    "evolves_pokedex": null,
+    "evolves_name": null
   },
   {
     "name": "meloetta-pirouette",
@@ -77,7 +81,8 @@
     "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/648-pirouette.png",
     "type": ["normal", "fighting"],
     "pokedex": 648,
-    "evolves_pokedex": null
+    "evolves_pokedex": null,
+    "evolves_name": null
   },
   {
     "name": "combusken",
@@ -93,7 +98,8 @@
     "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/256.png",
     "type": ["fire", "fighting"],
     "pokedex": 256,
-    "evolves_pokedex": 257
+    "evolves_pokedex": 257,
+    "evolves_name": "blaziken"
   },
   {
     "name": "kyurem-black",
@@ -109,7 +115,8 @@
     "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/646-black.png",
     "type": ["dragon", "ice"],
     "pokedex": 646,
-    "evolves_pokedex": null
+    "evolves_pokedex": null,
+    "evolves_name": null
   },
   {
     "name": "snover",
@@ -125,7 +132,8 @@
     "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/459.png",
     "type": ["grass", "ice"],
     "pokedex": 459,
-    "evolves_pokedex": 460
+    "evolves_pokedex": 460,
+    "evolves_name": "abomasnow"
   },
   {
     "name": "walrein",
@@ -141,7 +149,8 @@
     "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/365.png",
     "type": ["ice", "water"],
     "pokedex": 365,
-    "evolves_pokedex": null
+    "evolves_pokedex": null,
+    "evolves_name": null
   },
   {
     "name": "keldeo-ordinary",
@@ -157,7 +166,8 @@
     "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/647.png",
     "type": ["water", "fighting"],
     "pokedex": 647,
-    "evolves_pokedex": null
+    "evolves_pokedex": null,
+    "evolves_name": null
   },
   {
     "name": "weezing",
@@ -173,7 +183,8 @@
     "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/110.png",
     "type": ["poison"],
     "pokedex": 110,
-    "evolves_pokedex": null
+    "evolves_pokedex": null,
+    "evolves_name": null
   },
   {
     "name": "registeel",
@@ -189,7 +200,8 @@
     "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/379.png",
     "type": ["steel"],
     "pokedex": 379,
-    "evolves_pokedex": null
+    "evolves_pokedex": null,
+    "evolves_name": null
   },
   {
     "name": "poliwhirl",
@@ -205,7 +217,8 @@
     "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/61.png",
     "type": ["water"],
     "pokedex": 61,
-    "evolves_pokedex": 62
+    "evolves_pokedex": 62,
+    "evolves_name": "poliwrath"
   },
   {
     "name": "glalie",
@@ -221,7 +234,8 @@
     "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/362.png",
     "type": ["ice"],
     "pokedex": 362,
-    "evolves_pokedex": 478
+    "evolves_pokedex": 478,
+    "evolves_name": "froslass"
   },
   {
     "name": "vileplume",
@@ -237,6 +251,7 @@
     "backView": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/45.png",
     "type": ["grass", "poison"],
     "pokedex": 45,
-    "evolves_pokedex": null
+    "evolves_pokedex": null,
+    "evolves_name": null
   }
 ]
