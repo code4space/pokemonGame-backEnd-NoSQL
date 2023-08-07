@@ -70,6 +70,7 @@ export default class Pokemon {
             if (!userPokemon.length) return res.status(200).json({ pokemon: [], totalPokemon: 0, page: 1 })
             const pokemon = userPokemon[0].pokemons.map(async (el) => {
                 const { id, name, hp, attack, def, baseExp, power, img1, img2, summary, frontView, backView, type, pokedex, evolves_pokedex, evolves_name } = el.pokemonData;
+                console.log(evolves_name)
                 const typesRaw = await Types.find({ name: { $in: type } }, { _id: 0, __v: 0 })
                 const types = elementWeakness(typesRaw)
                 const level = el.level;
@@ -82,7 +83,8 @@ export default class Pokemon {
                     baseExp,
                     power: Math.floor(power + additionalStat(power, level)),
                     img1, img2, summary, frontView, backView, level, type: types, pokedex, evolves_pokedex,
-                    star: el.star, evolves_name
+                    star: el.star, evolves_name,
+                    base_stat: {hp, attack, def}
                 };
             })
             Promise.all(pokemon)
@@ -209,7 +211,7 @@ export default class Pokemon {
                 if (data.species.name === name) {
                     if (data.evolves_to.length) {
                         let evolve = data.evolves_to[0].species
-                        return {pokedex: evolve.url.split('/')[6], name: evolve.name}
+                        return { pokedex: evolve.url.split('/')[6], name: evolve.name }
                     } else {
                         return null
                     }

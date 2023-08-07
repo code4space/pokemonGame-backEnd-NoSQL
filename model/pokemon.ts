@@ -60,7 +60,11 @@ const schema = new mongoose.Schema({
     evolves_pokedex: {
         type: Number,
         default: null
-    }
+    },
+    evolves_name: {
+        type: String,
+        default: null
+    },
 });
 
 export const Pokemons = mongoose.model('Pokemons', schema);
