@@ -69,8 +69,7 @@ export default class Pokemon {
             const userPokemonCount = await Users.findById(req.user.id).select('pokemons')
             if (!userPokemon.length) return res.status(200).json({ pokemon: [], totalPokemon: 0, page: 1 })
             const pokemon = userPokemon[0].pokemons.map(async (el) => {
-                const { id, name, hp, attack, def, baseExp, power, img1, img2, summary, frontView, backView, type, pokedex, evolves_pokedex, evolves_name } = el.pokemonData;
-                console.log(evolves_name)
+                const { _id: id, name, hp, attack, def, baseExp, power, img1, img2, summary, frontView, backView, type, pokedex, evolves_pokedex, evolves_name } = el.pokemonData;
                 const typesRaw = await Types.find({ name: { $in: type } }, { _id: 0, __v: 0 })
                 const types = elementWeakness(typesRaw)
                 const level = el.level;
@@ -84,7 +83,7 @@ export default class Pokemon {
                     power: Math.floor(power + additionalStat(power, level)),
                     img1, img2, summary, frontView, backView, level, type: types, pokedex, evolves_pokedex,
                     star: el.star, evolves_name,
-                    base_stat: {hp, attack, def}
+                    base_stat: { hp, attack, def }
                 };
             })
             Promise.all(pokemon)
@@ -190,9 +189,10 @@ export default class Pokemon {
                 url: pokemonFromGacha['url']
             }).then((value) => value.data)
 
-            // Get summary
-            let detailSpecies = await axios.get(detailPokemon.species.url);
-            const allSummary: Array<any> = detailSpecies.data.flavor_text_entries;
+
+            //? Get summary
+            let detailSpecies = await axios.get(detailPokemon.species.url).then(value => value.data);
+            const allSummary: Array<any> = detailSpecies.flavor_text_entries;
             let enSummary: string = ''
             for (let i = 0; i < allSummary.length; i++) {
                 if (allSummary[i].language.name === "en") {
@@ -201,12 +201,17 @@ export default class Pokemon {
                 }
             }
 
+            //? Other Stats
             const type: Array<string> = detailPokemon.types.map(el => el.type.name);
 
             const { name, stats, base_experience, sprites, id: pokedex } = detailPokemon;
             const baseStatSum = stats.reduce((sum, stat) => sum + stat.base_stat, 0);
             const additionalPower = (base_experience) => base_experience * 0.1;
 
+            const typesRaw = await Types.find({ name: { $in: type } }, { _id: 0, __v: 0 })
+            const types = elementWeakness(typesRaw)
+
+            //? Find the evolution
             function findTheNextEvolution(data, name: string) {
                 if (data.species.name === name) {
                     if (data.evolves_to.length) {
@@ -224,18 +229,12 @@ export default class Pokemon {
                 }
             }
 
-            // Find the evolution
             const evolves = await axios({
-                method: "GET",
-                url: `https://pokeapi.co/api/v2/pokemon-species/${pokedex}`
-            }).then(async (value) => {
-                return await axios({
-                    method: 'GET',
-                    url: value.data.evolution_chain.url
-                }).then(value => {
-                    const isEvolving = value.data.chain
-                    return findTheNextEvolution(isEvolving, name)
-                })
+                method: 'GET',
+                url: detailSpecies.evolution_chain.url
+            }).then(value => {
+                const isEvolving = value.data.chain
+                return findTheNextEvolution(isEvolving, name)
             })
 
 
@@ -251,10 +250,11 @@ export default class Pokemon {
                 summary: enSummary,
                 frontView: sprites.front_default,
                 backView: sprites.back_default,
-                type,
+                type: types,
                 pokedex,
                 evolves_pokedex: evolves?.pokedex,
                 evolves_name: evolves?.name,
+                star: 1
             };
 
             res.status(200).json({ pokemon })
@@ -464,6 +464,110 @@ export default class Pokemon {
             next(error)
         } finally {
             session.endSession()
+        }
+    }
+
+    static async evolve(req, res, next) {
+        const session = await mongoose.startSession();
+        session.startTransaction();
+
+        try {
+            const { evolves_pokedex } = req.body
+            const { id: pokemonId } = req.params
+
+            const user = await Users.findById(req.user.id).session(session);
+            const pokemonIndex = user.pokemons.findIndex(el => el.pokemon.toString() === pokemonId)
+            if (pokemonIndex === -1) throw handleError('Bad Request', 'Pokemon not found')
+            const userPokemon = user.pokemons[pokemonIndex]
+            if (userPokemon.star !== 2) throw handleError('Bad Request', 'Must be two star pokemon')
+            if (userPokemon.star * 30 > userPokemon.level) throw handleError('Bad Request', 'Level not enough to evolve')
+
+            let pokemonByPokedex = await Pokemons.findOne({ pokedex: evolves_pokedex }, { __v: 0 })
+            if (!pokemonByPokedex) { // Get Pokemon from PokeAPI
+                let detailPokemon = await axios.get(`https://pokeapi.co/api/v2/pokemon/${evolves_pokedex}`)
+                    .then(value => value.data);
+
+                // Get summary
+                let detailSpecies = await axios.get(detailPokemon.species.url).then(value => value.data);
+                const allSummary: Array<any> = detailSpecies.flavor_text_entries;
+                let enSummary: string = ''
+                for (let i = 0; i < allSummary.length; i++) {
+                    if (allSummary[i].language.name === "en") {
+                        enSummary = allSummary[i].flavor_text.replace(/\\n|\\f/g, " ").replace(/\n|\f/g, " ");
+                        break;
+                    }
+                }
+
+                // Other stats
+                const type: Array<string> = detailPokemon.types.map(el => el.type.name);
+
+                const { name, stats, base_experience, sprites, id: pokedex } = detailPokemon;
+                const baseStatSum = stats.reduce((sum, stat) => sum + stat.base_stat, 0);
+                const additionalPower = (base_experience) => base_experience * 0.1;
+
+                // Find the evolution
+                function findTheNextEvolution(data, name: string) {
+                    if (data.species.name === name) {
+                        if (data.evolves_to.length) {
+                            let evolve = data.evolves_to[0].species
+                            return { pokedex: evolve.url.split('/')[6], name: evolve.name }
+                        } else {
+                            return null
+                        }
+                    } else {
+                        if (data.evolves_to.length) {
+                            for (const evolution of data.evolves_to) {
+                                return findTheNextEvolution(evolution, name)
+                            }
+                        }
+                    }
+                }
+
+                const evolves = await axios({
+                    method: 'GET',
+                    url: detailSpecies.evolution_chain.url
+                }).then(value => {
+                    const isEvolving = value.data.chain
+                    return findTheNextEvolution(isEvolving, name)
+                })
+
+                const pokemon = {
+                    name,
+                    attack: stats[1].base_stat,
+                    hp: stats[0].base_stat,
+                    def: stats[2].base_stat,
+                    baseExp: base_experience,
+                    power: base_experience + baseStatSum + additionalPower(base_experience),
+                    img1: sprites.other.dream_world.front_default,
+                    img2: sprites.other["official-artwork"].front_default,
+                    summary: enSummary,
+                    frontView: sprites.front_default,
+                    backView: sprites.back_default,
+                    type, pokedex,
+                    evolves_pokedex: evolves?.pokedex,
+                    evolves_name: evolves?.name,
+                };
+
+                const { attack, hp, def, baseExp, power, img1, img2, summary, frontView, backView, evolves_name } = pokemon
+                pokemonByPokedex = await Pokemons.create({ name, attack, hp, def, baseExp, power, img1, img2, summary, frontView, backView, type, pokedex, evolves_pokedex: pokemon.evolves_pokedex ?? null, evolves_name: evolves_name ?? null })
+
+            }
+
+            //? Delete pokemon
+            user.pokemons.splice(pokemonIndex, 1)
+
+            //? Add new evolving pokemon
+            user.pokemons.push({ pokemon: pokemonByPokedex._id })
+
+            await user.save();
+
+            await session.commitTransaction();
+            res.status(200).json({ message: `Success evolve your pokemon to ${pokemonByPokedex.name}` })
+        } catch (error) {
+            await session.abortTransaction();
+            next(error)
+        } finally {
+            session.endSession();
         }
     }
 }

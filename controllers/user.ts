@@ -2,7 +2,6 @@ import { comparePassword, hashPassword } from '../helper/bcrypt'
 import handleError from '../helper/error'
 import { getToken } from '../helper/jwt'
 import { Users } from '../model/user'
-import { Pokemons } from '../model/pokemon'
 import mongoose from 'mongoose'
 
 interface listBallType {
@@ -140,38 +139,32 @@ export default class User {
             if (!upLevel) throw handleError('Bad Request', "upLevel required!")
             if (!drawAmount) throw handleError('Bad Request', "drawAmount required!")
 
+            const user = await Users.findById(req.user.id).session(session);
 
             for (let i = 0; i < pokemonId.length; i++) {
-                await Users.updateOne(
-                    {
-                        _id: req.user.id,
-                        pokemons: {
-                            $elemMatch: {
-                                pokemon: { $in: await Pokemons.findOne({ _id: pokemonId[i] }) },
-                            },
-                        },
-                    },
-                    {
-                        $inc: { 'pokemons.$.level': upLevel }
-                    },
-                    { session });
+                const targetPokemonIndex = user.pokemons.findIndex(
+                    (pokemon) => pokemon.pokemon.toString() === pokemonId[i]
+                );
+
+                if (targetPokemonIndex === -1) {
+                    throw handleError('Bad Request', "Pokemon didn't found")
+                }
+
+                const userPokemon = user.pokemons[targetPokemonIndex]
+
+                if (userPokemon.level < (userPokemon.star * 30)) userPokemon.level += upLevel; 
             }
 
             //? get ball and draw chance
-            const { balls }: { balls: object } = await Users.findById(req.user.id)
             const { listBall }: { listBall: listBallType[] } = req.body;
 
-            let newBalls: object = { ...balls }
             for (let i = 0; i < listBall.length; i++) {
-                newBalls[listBall[i].ball] =
-                    newBalls[listBall[i].ball] + listBall[i].increase;
+                user.balls[listBall[i].ball] += listBall[i].increase;
             }
 
-            await Users.updateOne(
-                { _id: req.user.id },
-                { $set: { balls: newBalls }, $inc: { draw: drawAmount } },
-                { session }
-            );
+            user.draw += drawAmount
+            
+            await user.save();
 
             res.status(200).json({ message: 'Reward claimed' })
             await session.commitTransaction();
