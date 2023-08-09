@@ -8,7 +8,7 @@ import handleError from "../helper/error";
 import drawPokemon from "../helper/drawPokemon";
 
 function additionalStat(stat: number, level: number) {
-    return Math.floor((5 / 100) * stat) * level
+    return Math.floor((2.5 / 100) * stat) * level
 }
 
 export default class Pokemon {
@@ -444,7 +444,7 @@ export default class Pokemon {
                                 },
                             },
                         },
-                        { $inc: { 'pokemons.$.level': 5 } },
+                        { $inc: { 'pokemons.$.star': 1 } },
                         { session });
                     await skip()
                     res.status(200).json({ message: `Your ${name} has been leveled up by 5.`, status: true },)
@@ -550,19 +550,31 @@ export default class Pokemon {
 
                 const { attack, hp, def, baseExp, power, img1, img2, summary, frontView, backView, evolves_name } = pokemon
                 pokemonByPokedex = await Pokemons.create({ name, attack, hp, def, baseExp, power, img1, img2, summary, frontView, backView, type, pokedex, evolves_pokedex: pokemon.evolves_pokedex ?? null, evolves_name: evolves_name ?? null })
-
             }
 
             //? Delete pokemon
             user.pokemons.splice(pokemonIndex, 1)
 
+            //? if user already has the pokemon
+            const hasPokemon = user.pokemons.findIndex((el) => el.pokemon.toString() === pokemonByPokedex._id.toString())
+            if (hasPokemon !== -1) {
+                // if pokemon evolution star are already reach max
+                let totalStar = user.pokemons[hasPokemon].star
+                if (!pokemonByPokedex.evolves_pokedex && totalStar === 5) throw handleError('Conflict', "Your evolution star has already reached its maximum")
+                else if (pokemonByPokedex.evolves_pokedex && totalStar === 2) throw handleError('Conflict', "Your evolution star has already reached its maximum")
+                else user.pokemons[hasPokemon].star += 1
+            }
+
             //? Add new evolving pokemon
-            user.pokemons.push({ pokemon: pokemonByPokedex._id })
+            else user.pokemons.push({ pokemon: pokemonByPokedex._id })
+
+            
+            const typesRaw = await Types.find({ name: { $in: pokemonByPokedex.type } }, { _id: 0, __v: 0 })
 
             await user.save();
 
             await session.commitTransaction();
-            res.status(200).json({ message: `Success evolve your pokemon to ${pokemonByPokedex.name}` })
+            res.status(200).json({ pokemon: {...pokemonByPokedex._doc, type: elementWeakness(typesRaw), level: 1, star: 1} })
         } catch (error) {
             await session.abortTransaction();
             next(error)
