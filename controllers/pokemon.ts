@@ -254,7 +254,12 @@ export default class Pokemon {
                 pokedex,
                 evolves_pokedex: evolves?.pokedex,
                 evolves_name: evolves?.name,
-                star: 1
+                star: 1,
+                base_stat: {
+                    attack: stats[1].base_stat,
+                    hp: stats[0].base_stat,
+                    def: stats[2].base_stat,
+                }
             };
 
             res.status(200).json({ pokemon })
@@ -568,13 +573,13 @@ export default class Pokemon {
             //? Add new evolving pokemon
             else user.pokemons.push({ pokemon: pokemonByPokedex._id })
 
-            
+
             const typesRaw = await Types.find({ name: { $in: pokemonByPokedex.type } }, { _id: 0, __v: 0 })
 
             await user.save();
 
             await session.commitTransaction();
-            res.status(200).json({ pokemon: {...pokemonByPokedex._doc, type: elementWeakness(typesRaw), level: 1, star: 1} })
+            res.status(200).json({ pokemon: { ...pokemonByPokedex._doc, type: elementWeakness(typesRaw), level: 1, star: 1 } })
         } catch (error) {
             await session.abortTransaction();
             next(error)
