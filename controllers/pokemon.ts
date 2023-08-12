@@ -432,27 +432,51 @@ export default class Pokemon {
 
                 const userPokemon = await Users.findOne({
                     _id: req.user.id,
-                    pokemons: {
-                        $elemMatch: {
-                            pokemon: { $in: await Pokemons.findOne({ name }) },
-                        },
-                    },
-                }, { __v: 0 }).populate('pokemons.pokemon');
+                    'pokemons.pokemon': { $in: [await Pokemons.findOne({ name })] },
+                }, { __v: 0 })
+                    .populate({
+                        path: 'pokemons.pokemon',
+                        match: { name }, // This filters the populated array to only include the specified Pokemon
+                    })
+                    .exec();
+
+                Users.findOne({
+                    _id: req.user.id,
+                    'pokemons.pokemon': { $in: [await Pokemons.findOne({ name })] },
+                }, { __v: 0 })
+                    .populate({
+                        path: 'pokemons.pokemon',
+                        match: { name }, // This filters the populated array to only include the specified Pokemon
+                    })
+                    .exec();
 
                 if (userPokemon) {
-                    await Users.updateOne(
-                        {
-                            _id: req.user.id,
-                            pokemons: {
-                                $elemMatch: {
-                                    pokemon: { $in: await Pokemons.findOne({ name }) },
+                    const filteredPokemons = userPokemon.pokemons.filter(
+                        (entry) => entry.pokemon !== null
+                    );
+
+                    const addStar = async () => {
+                        await Users.updateOne(
+                            {
+                                _id: req.user.id,
+                                pokemons: {
+                                    $elemMatch: {
+                                        pokemon: { $in: await Pokemons.findOne({ name }) },
+                                    },
                                 },
                             },
-                        },
-                        { $inc: { 'pokemons.$.star': 1 } },
-                        { session });
+                            { $inc: { 'pokemons.$.star': 1 } },
+                            { session });
+                    }
+                    
+                    if (filteredPokemons[0].pokemon.evolves_pokedex && filteredPokemons[0].star < 2) {
+                        addStar()
+                    } else if (!filteredPokemons[0].pokemon.evolves_pokedex && filteredPokemons[0].star < 5) {
+                        addStar()
+                    }
+
                     await skip()
-                    res.status(200).json({ message: `Your ${name} has been leveled up by 5.`, status: true },)
+                    res.status(200).json({ message: `Your ${name} gain 1 star`, status: true },)
                 } else {
                     const user = await Users.findById(req.user.id).session(session);
                     user.pokemons.push({ pokemon: pokemon._id });
