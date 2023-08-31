@@ -15,7 +15,7 @@ export default function initializeSocketIO(httpServer: Server) {
   io.on('connection', (socket: any) => {
     let userRoom = null;
 
-    socket.on('joinRoom', (data) => {
+    socket.on('joinRoom', () => {
       for (const [room, users] of rooms.entries()) {
         if (users.length < 2) {
           userRoom = room;
@@ -29,7 +29,7 @@ export default function initializeSocketIO(httpServer: Server) {
       userRoom = newRoom;
       rooms.set(newRoom, [socket]);
       socket.join(newRoom);
-      io.to(newRoom).emit('roomInfo', { roomName: newRoom, users: 1});
+      io.to(newRoom).emit('roomInfo', { roomName: newRoom, users: 1 });
     })
 
     socket.on('message', (data) => {
@@ -37,13 +37,15 @@ export default function initializeSocketIO(httpServer: Server) {
     });
 
     socket.on('opponent-name', (data) => {
-      console.log(data, '==')
       io.to(data.room).emit('opponent-name', { opponentName: data.username });
     });
 
     socket.on('opponent-deck', (data) => {
-      console.log(data)
       io.to(data.room).emit('opponent-deck', { opponentDeck: data.opponentDeck, opponentName: data.opponentName });
+    })
+
+    socket.on('ready', (data) => {
+      io.to(data.room).emit('ready', { readyStatus: data.ready, opponentName: data.opponentName });
     })
 
     socket.on('disconnect', () => {
@@ -51,7 +53,6 @@ export default function initializeSocketIO(httpServer: Server) {
     });
   });
 
-  // Cleanup user data when disconnecting
   function cleanupUser(userRoom, socket) {
     if (userRoom) {
       const usersInRoom = rooms.get(userRoom);
