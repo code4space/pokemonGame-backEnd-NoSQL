@@ -48,6 +48,19 @@ export default function initializeSocketIO(httpServer: Server) {
       io.to(data.room).emit('ready', { readyStatus: data.ready, opponentName: data.opponentName });
     })
 
+    socket.on('add-turn', ({ room, name }) => {
+      io.to(room).emit('add-turn', { name });
+    })
+
+    socket.on('set-first-turn', ({ room, opponentName }) => {
+      const random = (Math.random() * 100)
+      io.to(room).emit('set-first-turn', { score: random, name: opponentName })
+    })
+
+    socket.on('update-pokemon', ({pokemon, room, name}) => {
+      io.to(room).emit('update-pokemon', { pokemon, name })
+    })
+
     socket.on('disconnect', () => {
       cleanupUser(userRoom, socket);
     });
