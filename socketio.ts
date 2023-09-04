@@ -57,8 +57,12 @@ export default function initializeSocketIO(httpServer: Server) {
       io.to(room).emit('set-first-turn', { score: random, name: opponentName })
     })
 
-    socket.on('update-pokemon', ({pokemon, room, name}) => {
+    socket.on('update-pokemon', ({ pokemon, room, name }) => {
       io.to(room).emit('update-pokemon', { pokemon, name })
+    })
+
+    socket.on('attack', ({ room, name, target, damage }) => {
+      io.to(room).emit('attack', { name, target, damage })
     })
 
     socket.on('disconnect', () => {
