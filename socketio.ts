@@ -48,8 +48,8 @@ export default function initializeSocketIO(httpServer: Server) {
       io.to(data.room).emit('ready', { readyStatus: data.ready, opponentName: data.opponentName });
     })
 
-    socket.on('add-turn', ({ room, name }) => {
-      io.to(room).emit('add-turn', { name });
+    socket.on('add-turn', ({ room, name, pokemon }) => {
+      io.to(room).emit('add-turn', { name, pokemon });
     })
 
     socket.on('set-first-turn', ({ room, opponentName }) => {
