@@ -16,7 +16,9 @@ export default function initializeSocketIO(httpServer: Server) {
     let userRoom = null;
 
     socket.on('joinRoom', () => {
+      console.log(rooms.entries())
       for (const [room, users] of rooms.entries()) {
+        // console.log(room, users)
         if (users.length < 2) {
           userRoom = room;
           users.push(socket);
@@ -52,9 +54,8 @@ export default function initializeSocketIO(httpServer: Server) {
       io.to(room).emit('add-turn', { name, pokemon });
     })
 
-    socket.on('set-first-turn', ({ room, opponentName }) => {
-      const random = (Math.random() * 100)
-      io.to(room).emit('set-first-turn', { score: random, name: opponentName })
+    socket.on('set-first-turn', ({ room, name, score }) => {
+      io.to(room).emit('set-first-turn', { score, name })
     })
 
     socket.on('update-pokemon', ({ pokemon, room, name }) => {
@@ -65,6 +66,15 @@ export default function initializeSocketIO(httpServer: Server) {
       io.to(room).emit('attack', { name, target, damage })
     })
 
+    socket.on('healing-target', ({ room, name, target }) => {
+      io.to(room).emit('healing-target', { name, target })
+    })
+
+    socket.on('use-item', ({ name, room, itemName }) => {
+      io.to(room).emit('use-item', { name, itemName });
+    })
+
+    // if disconnect
     socket.on('disconnect', () => {
       cleanupUser(userRoom, socket);
     });
