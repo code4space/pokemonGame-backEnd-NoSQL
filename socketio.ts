@@ -2,6 +2,7 @@ import socketIo from 'socket.io';
 import { Server } from 'http';
 
 const rooms = new Map()
+const player = new Map()
 
 export default function initializeSocketIO(httpServer: Server) {
   const io = new socketIo.Server(httpServer, {
@@ -15,31 +16,27 @@ export default function initializeSocketIO(httpServer: Server) {
   io.on('connection', (socket: any) => {
     let userRoom = null;
 
-    socket.on('joinRoom', () => {
-      console.log(rooms.entries())
+    socket.on('joinRoom', ({ name }) => {
       for (const [room, users] of rooms.entries()) {
-        // console.log(room, users)
         if (users.length < 2) {
           userRoom = room;
           users.push(socket);
+          player.get(room).push(name)
           socket.join(room);
-          io.to(room).emit('roomInfo', { roomName: room, users: users.length });
+          io.to(room).emit('roomInfo', { roomName: room, name: player.get(room) });
           return;
         }
       }
       const newRoom = Math.random().toString(36).substring(7);
       userRoom = newRoom;
       rooms.set(newRoom, [socket]);
+      player.set(newRoom, [name]);
       socket.join(newRoom);
-      io.to(newRoom).emit('roomInfo', { roomName: newRoom, users: 1 });
+      io.to(newRoom).emit('roomInfo', { roomName: newRoom });
     })
 
     socket.on('message', (data) => {
       io.to(data.room).emit('message', { username: data.username, message: data.message });
-    });
-
-    socket.on('opponent-name', (data) => {
-      io.to(data.room).emit('opponent-name', { opponentName: data.username });
     });
 
     socket.on('opponent-deck', (data) => {
@@ -74,6 +71,10 @@ export default function initializeSocketIO(httpServer: Server) {
       io.to(room).emit('use-item', { name, itemName });
     })
 
+    socket.on('use-ability', ({ name, room, abilityName, type }) => {
+      io.to(room).emit('use-ability', { name, abilityName, type });
+    })
+
     // if disconnect
     socket.on('disconnect', () => {
       cleanupUser(userRoom, socket);
@@ -83,13 +84,16 @@ export default function initializeSocketIO(httpServer: Server) {
   function cleanupUser(userRoom, socket) {
     if (userRoom) {
       const usersInRoom = rooms.get(userRoom);
+      const playerInRoom = player.get(userRoom);
       if (usersInRoom) {
         const index = usersInRoom.indexOf(socket);
         if (index !== -1) {
           usersInRoom.splice(index, 1);
+          playerInRoom.splice(index, 1);
           io.to(userRoom).emit('roomInfo', { roomName: userRoom, users: usersInRoom.length, disconnect: true });
           if (usersInRoom.length === 0) {
             rooms.delete(userRoom);
+            player.delete(userRoom);
           }
         }
       }
