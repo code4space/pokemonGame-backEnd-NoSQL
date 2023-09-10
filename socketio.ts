@@ -7,7 +7,7 @@ const player = new Map()
 export default function initializeSocketIO(httpServer: Server) {
   const io = new socketIo.Server(httpServer, {
     cors: {
-      origin: '*',
+      origin: 'https://pokemon-collection-game.vercel.app',
       methods: ['GET', 'POST', 'PATCH', 'DELETE'],
       credentials: true,
     },
@@ -15,7 +15,6 @@ export default function initializeSocketIO(httpServer: Server) {
 
   io.on('connection', (socket: any) => {
     let userRoom = null;
-
     socket.on('joinRoom', ({ name }) => {
       for (const [room, users] of rooms.entries()) {
         if (users.length < 2) {
@@ -90,7 +89,7 @@ export default function initializeSocketIO(httpServer: Server) {
         if (index !== -1) {
           usersInRoom.splice(index, 1);
           playerInRoom.splice(index, 1);
-          io.to(userRoom).emit('roomInfo', { roomName: userRoom, users: usersInRoom.length, disconnect: true });
+          io.to(userRoom).emit('roomInfo', { roomName: userRoom, disconnect: true, name: playerInRoom });
           if (usersInRoom.length === 0) {
             rooms.delete(userRoom);
             player.delete(userRoom);

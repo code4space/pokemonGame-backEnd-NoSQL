@@ -24,7 +24,7 @@ export default class User {
             const payload = { id: user.id };
             const access_token = getToken(payload)
 
-            res.status(200).json({ access_token })
+            res.status(200).json({ access_token, username })
         } catch (error) {
             next(error)
         }
@@ -39,11 +39,11 @@ export default class User {
             await Users.create({
                 username,
                 password: hashPassword(password),
-                draw: 10,
+                draw: 15,
                 balls: {
-                    pokeball: 7,
-                    greatball: 4,
-                    ultraball: 2,
+                    pokeball: 10,
+                    greatball: 8,
+                    ultraball: 5,
                     masterball: 1
                 },
                 gacha: 24
@@ -70,16 +70,10 @@ export default class User {
     static async pokeballIncrease(req, res, next) {
         try {
             const { balls }: { balls: object } = await Users.findById(req.user.id)
-            // const { listBall }: {listBall:listBallType[]} = req.body;
-            const listBall: listBallType[] = [
-                { ball: 'pokeball', increase: 5 },
-                { ball: 'greatball', increase: 3 },
-                { ball: 'ultraball', increase: 1 },
-                { ball: 'masterball', increase: 0 }
-            ]
+            console.log(req.body.listBall)
+            const listBall: listBallType[] = req.body.listBall
 
             let newBalls: object = balls
-            console.log(newBalls)
             for (let i = 0; i < listBall.length; i++) {
                 newBalls[listBall[i].ball] =
                     newBalls[listBall[i].ball] + listBall[i].increase;
@@ -152,7 +146,7 @@ export default class User {
 
                 const userPokemon = user.pokemons[targetPokemonIndex]
 
-                if (userPokemon.level < (userPokemon.star * 30)) userPokemon.level += upLevel; 
+                if (userPokemon.level < (userPokemon.star * 30)) userPokemon.level += upLevel;
             }
 
             //? get ball and draw chance
@@ -163,7 +157,7 @@ export default class User {
             }
 
             user.draw += drawAmount
-            
+
             await user.save();
 
             res.status(200).json({ message: 'Reward claimed' })
