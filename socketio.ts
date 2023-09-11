@@ -7,7 +7,7 @@ const player = new Map()
 export default function initializeSocketIO(httpServer: Server) {
   const io = new socketIo.Server(httpServer, {
     cors: {
-      origin: 'https://pokemon-collection-game.vercel.app',
+      origin: '*',
       methods: ['GET', 'POST', 'PATCH', 'DELETE'],
       credentials: true,
     },
